@@ -1,6 +1,6 @@
 # Happie - Chef Christoffel's Menu App 👨‍🍳
 
-A React Native mobile application that allows Chef Christoffel to manage his restaurant menu digitally. Chef Christoffel can add, view, and filter menu items across different courses.
+A React Native mobile application that allows Chef Christoffel to manage his restaurant menu digitally. Chef Christoffel can add, view,delete and filter menu items across different courses.
 
 ## Features
 
@@ -95,6 +95,27 @@ Happie/
 └── README.md             # This file
 ```
 ## FAQ's
+### User FAQs
+
+**Q: How do I add a new dish?**
+A: Go to the "Add" screen, fill in the dish name, course, description, and price, then tap "Save Item".
+
+**Q: Can I delete a dish?**
+A: Yes, tap the ❌ icon next to any menu item in the "Menu" screen.
+
+**Q: How do I filter by course?**
+A: Go to the "Menu" screen and select the course from the filter options (All/Starters/Mains/Desserts).
+
+## Developer FAQs
+
+**Q: Why does Expo complain about missing modules?**
+A: Run npm install to make sure all dependencies are installed. Use npx expo install <package> for Expo-managed packages.
+
+**Q: My font is not loading, what do I do?**
+A: Run npx expo install expo-font to ensure the font dependency is installed.
+
+**Q: My Expo Go app won’t connect?**
+A: Ensure your phone and computer are on the same Wi-Fi network. Use --tunnel mode if LAN mode fails: npx expo start --tunnel.
 ...
 ## Data Structure
 
@@ -136,7 +157,7 @@ npx expo install expo-font @expo-google-fonts/anton
 - **Home Screen**
   - Display all menu items organized by course
   - Show total menu item count
-  - Calculate and display average prices per course
+  - Display average prices per course
   - Visual branding with chef image and food showcase
   
 - **Add Menu Screen**
@@ -152,14 +173,9 @@ npx expo install expo-font @expo-google-fonts/anton
   - Organized display with course sections
   
 #### Design & UI
-- **Light/Dark Mode Toggle**
-  - Toggle button with sun/moon icons
-  - Theme persistence across all screens
-  - Dynamic color scheme for optimal readability
-  
-- **Custom Typography**
-  - Anton font integration for "HAPPIE" branding
-  - Consistent font hierarchy throughout app
+- Light/Dark Mode toggle
+- Rounded cards and modern UI components
+- Bottom navigation bar with icons
   
 - **Visual Elements**
   - Chef Christoffel character image
@@ -196,7 +212,6 @@ npx expo install expo-font @expo-google-fonts/anton
 - react-native: ^0.72.0
 - expo: ~49.0.0
 - typescript: ^5.1.3
-- @expo-google-fonts/anton: Latest
 - expo-font: Latest
 
 ---
@@ -204,6 +219,6 @@ npx expo install expo-font @expo-google-fonts/anton
 ## Acknowledgments
 
 - Chef Christoffel for the concept and branding
-- (apps i used for refernce)
+- Uber Eats app, Noodke and Ramu
 - Claude for help in the terminal while trying to run the app
 ---
