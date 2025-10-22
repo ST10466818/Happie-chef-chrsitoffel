@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
-import { useFonts, Anton_400Regular } from '@expo-google-fonts/anton';
+import { useFonts, Anton_400Regular } from './@expo-google-fonts/anton';
 
 // Define types
 type MenuItem = {
