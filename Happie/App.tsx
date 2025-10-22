@@ -1,9 +1,8 @@
-// App.tsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView, StyleSheet, Alert } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
 
-// Types
+// Course Types
 type CourseType = 'Starter' | 'Mains' | 'Desserts';
 
 type MenuItem = {
@@ -55,7 +54,7 @@ export default function App() {
     setMenuItems(menuItems.filter(item => item.id !== id));
   };
 
-  // Screens
+  // Different Screens
   const renderHome = () => (
     <View style={styles.screen}>
       <Text style={styles.title}>Welcome Chef!</Text>
@@ -162,7 +161,7 @@ export default function App() {
     case 'add': content = renderAddMenu(); break;
     case 'menu': content = renderMenu(); break;
   }
-
+//Go back
   return (
     <View style={styles.container}>
       {content}
@@ -203,7 +202,7 @@ const styles = StyleSheet.create({
   courseTitle: { fontWeight: 'bold', fontSize: 18, marginBottom: 5 },
   menuItem: { backgroundColor: '#f9f9f9', padding: 10, borderRadius: 8, marginBottom: 10 },
 
-  // --- Add these for the course dropdown ---
+  // course dropdown situation
   dropdown: {
     flexDirection: 'row',
     justifyContent: 'space-between',
