@@ -225,3 +225,4 @@ npx expo install expo-font @expo-google-fonts/anton
 - Uber Eats app, Noodke and Ramu
 - Claude for help in the terminal while trying to run the app
 ---
+![app image](https://github.com/user-attachments/assets/a50fe467-a031-4d18-8e11-089d6d689893)
