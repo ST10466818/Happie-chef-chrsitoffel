@@ -1,64 +1,41 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { useFonts, Anton_400Regular } from '@expo-google-fonts/anton';
+
+// Define types
+type MenuItem = {
+  id: number;
+  name: string;
+  description: string;
+  course: 'Starter' | 'Mains' | 'Desserts';
+  price: number;
+  pairing?: string;
+};
+
+type NewMenuItem = {
+  name: string;
+  description: string;
+  course: 'Starter' | 'Mains' | 'Desserts';
+  price: string;
+  pairing: string;
+};
+
+type ScreenType = 'home' | 'addMenu' | 'filter';
 
 export default function App() {
-  // tracks which screen to show
-  const [currentScreen, setCurrentScreen] = useState('home');
+  // Load the Anton font
+  let [fontsLoaded] = useFonts({
+    Anton_400Regular,
+  });
 
-  // stores menu items
-  const [menuItems, setMenuItems] = useState([
-    {
-      id: 1,
-      name: 'Brie & Thyme Koevertjies (4 pcs)',
-      course: 'Starter',
-      price: 95,
-      description: 'creamy brie phyllo parcels glazed with honey and thyme, served with biltong shavings and walnuts.',
-      pairing: 'Klein Zalze Chardonnay (glass) or Castle Lager (500ml)',
-    },
-    {
-      id: 2,
-      name: 'Boerenkaas & Corn Samoosas (4 pcs)',
-      course: 'Starter',
-      price: 85,
-      description: 'Golden, crispy pastry pockets filled with creamy boerenkaas and sweet corn, served with a tangy tomato relish for dipping.',    
-      pairing: 'Durbanville Hills Sauvignon Blanc (glass) or Jack Black Pale Ale (340ml)',
-    },
-    {
-      id: 3,
-      name: 'Butternut & Spinach Lasagna',
-      course: 'Mains',
-      price: 160,
-      description: 'Layers of roasted butternut, spinach, ricotta, and herbed tomato sauce.',
-      pairing: 'Glen Carlou Merlot (glass)'
-    },
-    {
-      id: 4,
-      name: 'Cape Malay Curry',
-      course: 'Mains',
-      price: 180,
-      description: 'A fragrant, mild chicken curry served with basmati rice, sambals, and roti.',
-      pairing: 'Waterford Rose-Mary (glass)'
-    },
-    { 
-      id: 5,
-      name: 'Peppermint Dom Pedro',
-      course: 'Desserts',
-      price: 90,
-      description: 'A creamy cocktail blended with peppermint liquor and Amarula.',
-      pairing: 'A festive finish to your meal.'
-    },
-    { 
-      id: 6,
-      name: 'Milk Tart Cheesecake',
-      course: 'Desserts',
-      price: 90,
-      description: 'A fusion of creamy cheesecake and traditional South African milk tart, dusted with cinnamon.',
-      pairing: 'Hot coffee or rooibos tea'
-    },
-  ]);
+  // tracks which screen to show
+  const [currentScreen, setCurrentScreen] = useState<ScreenType>('home');
+
+  // stores menu items - STARTING EMPTY so chef can add items
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
   // Add Menu form
-  const [newItem, setNewItem] = useState({
+  const [newItem, setNewItem] = useState<NewMenuItem>({
     name: '',
     description: '',
     course: 'Starter',
@@ -67,9 +44,9 @@ export default function App() {
   });
 
   // Function to add a new menu item
-  const addMenuItem = () => {
+  const addMenuItem = (): void => {
     if (newItem.name && newItem.price) {
-      const item = {
+      const item: MenuItem = {
         id: menuItems.length + 1,
         name: newItem.name,
         description: newItem.description,
@@ -80,43 +57,46 @@ export default function App() {
       setMenuItems([...menuItems, item]);
       // Reset form
       setNewItem({ name: '', description: '', course: 'Starter', price: '', pairing: '' });
-      alert('Menu item added successfully!');
+      Alert.alert('Success!', 'Menu item added successfully!');
     } else {
-      alert('Please fill in name and price');
+      Alert.alert('Error', 'Please fill in name and price');
     }
   };
 
-  // duplicate removeMenuItem removed — single implementation above retained
+  // Function to remove a menu item
+  const removeMenuItem = (id: number): void => {
+    setMenuItems(menuItems.filter(item => item.id !== id));
+    Alert.alert('Deleted', 'Menu item removed successfully');
+  };
 
-// Function to calculate average price by course
-  const calculateAverageByCourse = (course: string) => {
+  // Function to calculate average price by course
+  const calculateAverageByCourse = (course: string): string => {
     const courseItems = menuItems.filter(item => item.course === course);
     if (courseItems.length === 0) return '0.00';
     const total = courseItems.reduce((sum, item) => sum + item.price, 0);
     return (total / courseItems.length).toFixed(2);
   };
 
-// Function to remove a menu item
-const removeMenuItem = (id: number) => {
-  setMenuItems(menuItems.filter(item => item.id !== id));
-};
-
-// Filter menu items by course
-  const [filterCourse, setFilterCourse] = useState('All');
-  const getFilteredItems = () => {
+  // Filter menu items by course
+  const [filterCourse, setFilterCourse] = useState<'All' | 'Starter' | 'Mains' | 'Desserts'>('All');
+  const getFilteredItems = (): MenuItem[] => {
     if (filterCourse === 'All') return menuItems;
     return menuItems.filter(item => item.course === filterCourse);
   };
 
-  // continue to screen-based rendering
-// HOME SCREEN
+  // Wait for fonts to load
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  // HOME SCREEN
   if (currentScreen === 'home') {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.scrollView}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.title}>HAPPIE</Text>
+            <Text style={[styles.title, { fontFamily: 'Anton_400Regular' }]}>HAPPIE</Text>
             <Text style={styles.subtitle}>BY CHEF CHRISTOFFEL</Text>
             <Text style={styles.chefEmoji}>👨‍🍳</Text>
           </View>
@@ -144,14 +124,49 @@ const removeMenuItem = (id: number) => {
           <View style={styles.averageSection}>
             <Text style={styles.sectionTitle}>Average Prices by Course</Text>
             <Text style={styles.averageText}>Starters: R{calculateAverageByCourse('Starter')}</Text>
-            <Text style={styles.averageText}>Mains: R{calculateAverageByCourse('Main')}</Text>
-            <Text style={styles.averageText}>Desserts: R{calculateAverageByCourse('Dessert')}</Text>
+            <Text style={styles.averageText}>Mains: R{calculateAverageByCourse('Mains')}</Text>
+            <Text style={styles.averageText}>Desserts: R{calculateAverageByCourse('Desserts')}</Text>
           </View>
 
           {/* Total Menu Items */}
-          <Text style={styles.totalItems}>
-            Total Menu Items: {menuItems.length}
-          </Text>
+          <View style={styles.totalSection}>
+            <Text style={styles.totalItems}>
+              Total Menu Items: {menuItems.length}
+            </Text>
+          </View>
+
+          {/* Display Menu Items */}
+          {menuItems.length === 0 ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>No menu items yet!</Text>
+              <Text style={styles.emptySubtext}>Use "Add to Menu" to create your first dish</Text>
+            </View>
+          ) : (
+            <View style={styles.menuPreview}>
+              <Text style={styles.menuPreviewTitle}>Our Menu</Text>
+              {(['Starter', 'Mains', 'Desserts'] as const).map((course) => {
+                const courseItems = menuItems.filter(item => item.course === course);
+                if (courseItems.length === 0) return null;
+                
+                return (
+                  <View key={course}>
+                    <Text style={styles.courseTitle}>{course}</Text>
+                    {courseItems.map((item) => (
+                      <View key={item.id} style={styles.menuItemPreview}>
+                        <View style={styles.menuItemHeader}>
+                          <Text style={styles.menuItemName}>{item.name}</Text>
+                          <Text style={styles.menuItemPrice}>R{item.price}</Text>
+                        </View>
+                        <Text style={styles.menuItemDescription} numberOfLines={2}>
+                          {item.description}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                );
+              })}
+            </View>
+          )}
         </ScrollView>
 
         {/* Bottom Navigation */}
@@ -185,7 +200,7 @@ const removeMenuItem = (id: number) => {
       <View style={styles.container}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.header}>
-            <Text style={styles.title}>HAPPIE</Text>
+            <Text style={[styles.title, { fontFamily: 'Anton_400Regular' }]}>HAPPIE</Text>
             <Text style={styles.chefEmoji}>👨‍🍳</Text>
           </View>
 
@@ -198,13 +213,13 @@ const removeMenuItem = (id: number) => {
               style={styles.input}
               placeholder="Name"
               value={newItem.name}
-              onChangeText={(text) => setNewItem({...newItem, name: text})}
+              onChangeText={(text: string) => setNewItem({...newItem, name: text})}
             />
 
             <Text style={styles.label}>Course</Text>
             <View style={styles.pickerContainer}>
               <TouchableOpacity 
-                style={styles.courseButton}
+                style={[styles.courseButton, newItem.course === 'Starter' && styles.courseButtonActive]}
                 onPress={() => setNewItem({...newItem, course: 'Starter'})}
               >
                 <Text style={newItem.course === 'Starter' ? styles.courseSelected : styles.courseText}>
@@ -212,19 +227,19 @@ const removeMenuItem = (id: number) => {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={styles.courseButton}
-                onPress={() => setNewItem({...newItem, course: 'Main'})}
+                style={[styles.courseButton, newItem.course === 'Mains' && styles.courseButtonActive]}
+                onPress={() => setNewItem({...newItem, course: 'Mains'})}
               >
-                <Text style={newItem.course === 'Main' ? styles.courseSelected : styles.courseText}>
-                  Main
+                <Text style={newItem.course === 'Mains' ? styles.courseSelected : styles.courseText}>
+                  Mains
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={styles.courseButton}
-                onPress={() => setNewItem({...newItem, course: 'Dessert'})}
+                style={[styles.courseButton, newItem.course === 'Desserts' && styles.courseButtonActive]}
+                onPress={() => setNewItem({...newItem, course: 'Desserts'})}
               >
-                <Text style={newItem.course === 'Dessert' ? styles.courseSelected : styles.courseText}>
-                  Dessert
+                <Text style={newItem.course === 'Desserts' ? styles.courseSelected : styles.courseText}>
+                  Desserts
                 </Text>
               </TouchableOpacity>
             </View>
@@ -236,7 +251,7 @@ const removeMenuItem = (id: number) => {
               multiline
               numberOfLines={4}
               value={newItem.description}
-              onChangeText={(text) => setNewItem({...newItem, description: text})}
+              onChangeText={(text: string) => setNewItem({...newItem, description: text})}
             />
 
             <Text style={styles.label}>Price</Text>
@@ -245,7 +260,7 @@ const removeMenuItem = (id: number) => {
               placeholder="R"
               keyboardType="numeric"
               value={newItem.price}
-              onChangeText={(text) => setNewItem({...newItem, price: text})}
+              onChangeText={(text: string) => setNewItem({...newItem, price: text})}
             />
 
             <TouchableOpacity 
@@ -257,21 +272,27 @@ const removeMenuItem = (id: number) => {
 
             {/* Show existing menu items with delete option */}
             <View style={styles.menuListContainer}>
-              <Text style={styles.menuListTitle}>Current Menu Items</Text>
-              {menuItems.map((item) => (
-                <View key={item.id} style={styles.menuListItem}>
-                  <View style={styles.menuItemInfo}>
-                    <Text style={styles.menuItemName}>{item.name}</Text>
-                    <Text style={styles.menuItemCourse}>{item.course} - R{item.price}</Text>
+              <Text style={styles.menuListTitle}>Current Menu Items ({menuItems.length})</Text>
+              <Text style={styles.menuListSubtitle}>Tap ❌ to remove an item</Text>
+              
+              {menuItems.length === 0 ? (
+                <Text style={styles.emptyMessage}>No menu items yet. Add your first dish above!</Text>
+              ) : (
+                menuItems.map((item) => (
+                  <View key={item.id} style={styles.menuListItem}>
+                    <View style={styles.menuItemInfo}>
+                      <Text style={styles.menuItemNameList}>{item.name}</Text>
+                      <Text style={styles.menuItemCourse}>{item.course} - R{item.price}</Text>
+                    </View>
+                    <TouchableOpacity 
+                      onPress={() => removeMenuItem(item.id)}
+                      style={styles.deleteButton}
+                    >
+                      <Text style={styles.deleteButtonText}>❌</Text>
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity 
-                    onPress={() => removeMenuItem(item.id)}
-                    style={styles.deleteButton}
-                  >
-                    <Text style={styles.deleteButtonText}>❌</Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
+                ))
+              )}
             </View>
           </View>
         </ScrollView>
@@ -306,7 +327,8 @@ const removeMenuItem = (id: number) => {
       <View style={styles.container}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.header}>
-            <Text style={styles.title}>HAPPIE</Text>
+            <Text style={[styles.title, { fontFamily: 'Anton_400Regular' }]}>HAPPIE</Text>
+          
             <Text style={styles.chefEmoji}>👨‍🍳</Text>
           </View>
 
@@ -329,41 +351,51 @@ const removeMenuItem = (id: number) => {
                 <Text style={styles.filterButtonText}>Starters</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={[styles.filterButton, filterCourse === 'Main' && styles.filterButtonActive]}
-                onPress={() => setFilterCourse('Main')}
+                style={[styles.filterButton, filterCourse === 'Mains' && styles.filterButtonActive]}
+                onPress={() => setFilterCourse('Mains')}
               >
                 <Text style={styles.filterButtonText}>Mains</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={[styles.filterButton, filterCourse === 'Dessert' && styles.filterButtonActive]}
-                onPress={() => setFilterCourse('Dessert')}
+                style={[styles.filterButton, filterCourse === 'Desserts' && styles.filterButtonActive]}
+                onPress={() => setFilterCourse('Desserts')}
               >
                 <Text style={styles.filterButtonText}>Desserts</Text>
               </TouchableOpacity>
             </View>
 
             {/* Display filtered menu items */}
-            {['Starter', 'Main', 'Dessert'].map((course) => {
-              const courseItems = getFilteredItems().filter(item => item.course === course);
-              if (courseItems.length === 0 && filterCourse !== 'All') return null;
-              
-              return (
-                <View key={course}>
-                  <Text style={styles.courseTitle}>{course}s</Text>
-                  <Text style={styles.courseDescription}>description.</Text>
-                  
-                  {courseItems.map((item) => (
-                    <View key={item.id} style={styles.menuItem}>
-                      <View style={styles.menuItemHeader}>
-                        <Text style={styles.menuItemName}>{item.name}</Text>
-                        <Text style={styles.menuItemPrice}>R{item.price}</Text>
+            {menuItems.length === 0 ? (
+              <Text style={styles.emptyMessage}>No menu items available yet. Add some items first!</Text>
+            ) : (
+              (['Starter', 'Mains', 'Desserts'] as const).map((course) => {
+                const courseItems = getFilteredItems().filter(item => item.course === course);
+                if (courseItems.length === 0 && filterCourse !== 'All') return null;
+                if (courseItems.length === 0) return (
+                  <View key={course}>
+                    <Text style={styles.courseTitle}>{course}</Text>
+                    <Text style={styles.emptyMessage}>No {course.toLowerCase()} available.</Text>
+                  </View>
+                );
+                
+                return (
+                  <View key={course}>
+                    <Text style={styles.courseTitle}>{course}</Text>
+                    <Text style={styles.courseDescription}>description.</Text>
+                    
+                    {courseItems.map((item) => (
+                      <View key={item.id} style={styles.menuItem}>
+                        <View style={styles.menuItemHeader}>
+                          <Text style={styles.menuItemName}>{item.name}</Text>
+                          <Text style={styles.menuItemPrice}>R{item.price}</Text>
+                        </View>
+                        <Text style={styles.menuItemDescription}>{item.description}</Text>
                       </View>
-                      <Text style={styles.menuItemDescription}>{item.description}</Text>
-                    </View>
-                  ))}
-                </View>
-              );
-            })}
+                    ))}
+                  </View>
+                );
+              })
+            )}
           </View>
         </ScrollView>
 
@@ -452,14 +484,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     paddingHorizontal: 20,
-    marginBottom: 30,
+    marginBottom: 20,
   },
   averageSection: {
     backgroundColor: '#F7FAFC',
     padding: 20,
     marginHorizontal: 20,
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   sectionTitle: {
     fontSize: 18,
@@ -470,11 +502,47 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 5,
   },
+  totalSection: {
+    backgroundColor: '#E8F5E9',
+    padding: 15,
+    marginHorizontal: 20,
+    borderRadius: 10,
+    marginBottom: 20,
+  },
   totalItems: {
     textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  emptyContainer: {
+    padding: 40,
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#666',
+  },
+  emptySubtext: {
+    fontSize: 14,
+    color: '#999',
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  menuPreview: {
+    paddingHorizontal: 20,
     marginBottom: 20,
+  },
+  menuPreviewTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 15,
+  },
+  menuItemPreview: {
+    marginBottom: 15,
+    paddingBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
   },
   bottomNav: {
     flexDirection: 'row',
@@ -543,6 +611,11 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
     borderRadius: 5,
     alignItems: 'center',
+    backgroundColor: '#FFF',
+  },
+  courseButtonActive: {
+    backgroundColor: '#E8F5E9',
+    borderColor: '#4CAF50',
   },
   courseText: {
     fontSize: 14,
@@ -566,10 +639,18 @@ const styles = StyleSheet.create({
   },
   menuListContainer: {
     marginTop: 30,
+    paddingTop: 20,
+    borderTopWidth: 2,
+    borderTopColor: '#E0E0E0',
   },
   menuListTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  menuListSubtitle: {
+    fontSize: 12,
+    color: '#666',
     marginBottom: 15,
   },
   menuListItem: {
@@ -584,7 +665,7 @@ const styles = StyleSheet.create({
   menuItemInfo: {
     flex: 1,
   },
-  menuItemName: {
+  menuItemNameList: {
     fontSize: 16,
     fontWeight: '600',
   },
@@ -598,6 +679,12 @@ const styles = StyleSheet.create({
   },
   deleteButtonText: {
     fontSize: 20,
+  },
+  emptyMessage: {
+    textAlign: 'center',
+    color: '#999',
+    fontStyle: 'italic',
+    marginVertical: 20,
   },
   menuContainer: {
     padding: 20,
@@ -655,6 +742,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 8,
+  },
+  menuItemName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    flex: 1,
   },
   menuItemPrice: {
     fontSize: 16,
