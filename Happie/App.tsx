@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
 import { useFonts, Anton_400Regular } from '@expo-google-fonts/anton';
 
 // Define types
@@ -98,7 +98,11 @@ export default function App() {
           <View style={styles.header}>
             <Text style={[styles.title, { fontFamily: 'Anton_400Regular' }]}>HAPPIE</Text>
             <Text style={styles.subtitle}>BY CHEF CHRISTOFFEL</Text>
-            <Text style={styles.chefEmoji}>👨‍🍳</Text>
+            <Image 
+              source={require('./assets/chef.png')} 
+              style={styles.chefImage}
+              resizeMode="contain"
+            />
           </View>
 
           {/* Food Images */}
@@ -201,7 +205,11 @@ export default function App() {
         <ScrollView style={styles.scrollView}>
           <View style={styles.header}>
             <Text style={[styles.title, { fontFamily: 'Anton_400Regular' }]}>HAPPIE</Text>
-            <Text style={styles.chefEmoji}>👨‍🍳</Text>
+            <Image 
+              source={require('./assets/chef.png')} 
+              style={styles.chefImage}
+              resizeMode="contain"
+            />
           </View>
 
           <View style={styles.formContainer}>
@@ -328,8 +336,11 @@ export default function App() {
         <ScrollView style={styles.scrollView}>
           <View style={styles.header}>
             <Text style={[styles.title, { fontFamily: 'Anton_400Regular' }]}>HAPPIE</Text>
-          
-            <Text style={styles.chefEmoji}>👨‍🍳</Text>
+            <Image 
+              source={require('./assets/chef.png')} 
+              style={styles.chefImage}
+              resizeMode="contain"
+            />
           </View>
 
           <View style={styles.menuContainer}>
@@ -448,8 +459,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
   },
-  chefEmoji: {
-    fontSize: 40,
+  chefImage: {
+    width: 100,
+    height: 100,
     marginTop: 10,
   },
   imageContainer: {
