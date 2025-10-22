@@ -128,7 +128,7 @@ export default function App() {
   const renderMenu = () => {
     const courses: CourseType[] = ['Starter', 'Mains', 'Desserts'];
     return (
-      <ScrollView contentContainerStyle={styles.screen}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 80, paddingHorizontal: 20 }}>
         <Text style={styles.title}>Menu</Text>
         {courses.map(course => (
           <View key={course} style={styles.courseSection}>
@@ -189,7 +189,11 @@ export default function App() {
 // Styles
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  screen: { flexGrow: 1, padding: 20 },
+  screen: { 
+  flex: 1,                // changed from flexGrow
+  padding: 20,
+  justifyContent: 'flex-start' // ensures items start from top
+},
   title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
   input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10, marginBottom: 15 },
   label: { marginBottom: 5, fontWeight: '600' },
@@ -222,3 +226,12 @@ const styles = StyleSheet.create({
     borderColor: '#3d944e',
   },
 });
+const isDarkMode = true; // or from state
+
+const backgroundColor = isDarkMode ? '#1e1e1e' : '#fff';
+const textColor = isDarkMode ? '#fff' : '#000';
+
+<View style={{ flex: 1, backgroundColor }}>
+  <Text style={{ color: textColor }}>Hello</Text>
+</View>
+
