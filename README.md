@@ -1,4 +1,7 @@
 # Happie - Chef Christoffel's Menu App 👨‍🍳
+[Chef Christoffel Logo] 
+<img width="500" height="500" alt="happie" src="https://github.com/user-attachments/assets/d47bad56-7025-4fc3-9ffa-def3aeeb8716" />
+
 
 A React Native mobile application that allows Chef Christoffel to manage his restaurant menu digitally. Chef Christoffel can add, view,delete and filter menu items across different courses.
 
