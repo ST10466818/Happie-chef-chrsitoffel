@@ -1,5 +1,6 @@
 # Happie - Chef Christoffel's Menu App 👨‍🍳
 [Chef Christoffel Logo] 
+
 <img width="500" height="500" alt="happie" src="https://github.com/user-attachments/assets/d47bad56-7025-4fc3-9ffa-def3aeeb8716" />
 
 
