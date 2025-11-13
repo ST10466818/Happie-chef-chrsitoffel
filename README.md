@@ -93,7 +93,8 @@ Scan the QR code with:
 ```
 Happie/
 ├── assets/
-│   └── chef.png           # Chef Christoffel logo
+│   └── chef.png         # Chef Christoffel logo
+├──index.js
 ├── App.tsx                # Main application file
 ├── package.json           # Dependencies
 └── README.md             # This file
