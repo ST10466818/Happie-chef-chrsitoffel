@@ -212,6 +212,10 @@ npx expo install expo-font @expo-google-fonts/anton
 - `getFilteredItems()` - Filters menu items based on selected course
 - `getThemedStyles()` - Returns dynamic styles based on theme
 
+ image of the array format
+ <img width="844" height="292" alt="Screenshot 2025-11-13 221049" src="https://github.com/user-attachments/assets/19ed826a-4ad1-4802-9f83-9a1721ece2f8" />
+ 
+
 #### Dependencies
 - react-native: ^0.72.0
 - expo: ~49.0.0
